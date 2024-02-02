@@ -6,31 +6,35 @@ div {
   font-family: sans-serif;
 }
 
-.custom-buttons {
-  display: flex;
-  justify-content: center;
-}
 button {
-  background-color: yellow;
+  margin: 1px;
+  flex-wrap: wrap;
+  background: #56ab2f;
+  background: linear-gradient(to right, #a8e063, #56ab2f);
+  color: black;
+  border: 2px solid #6ca24a;
+  border-radius: 35px;
 }
 
 .custom-heading {
-  color: #007bff;
+  color: #2b64a0c5;
   font-size: 2em;
   margin: 0;
 }
 
 label {
-  color: green;
+  color: #2b64a0c5;
+  font-size: 13px;
 }
 
 .add {
-  background-color: purple;
+  margin-bottom: 5px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   display: flex;
 }
+
 .training-plan {
   background-color: white;
   display: flex;
@@ -38,17 +42,20 @@ label {
   align-items: center;
 }
 
-img {
-  width: 150px;
-  height: 150px;
-}
 .exercise-category {
-  background-color: brown;
-  font-size: 20px;
+  font-size: 15px;
+  inline-size: auto;
+  color: black;
 }
-h2 {
-  font-size: 40px;
+
+.custom-parameter {
+  margin: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-ul {
-  background-color: chartreuse;
+.input {
+  border: none;
+  border-radius: px;
+  background-color: #655e5e;
 }

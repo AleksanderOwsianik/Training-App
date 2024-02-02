@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ExerciseList from '@components/ExerciseList';
 import './main.scss';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://vcvnxuxqzbyoikhsszqq.supabase.co';
+const supabaseKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjdm54dXhxemJ5b2lraHNzenFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDYyNjk1NTYsImV4cCI6MjAyMTg0NTU1Nn0.Shuy3YGPYjRC4lxzre-NW2B0TbnfMjVR0zUxNoY_RWs';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const allExercises = {
   Chest: [
@@ -127,6 +133,17 @@ function TrainingApp() {
   );
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  const [formData, setFormData] = useState({
+    nickname: '',
+    email: '',
+    text: 'You need help, ask me.',
+  });
+
+  const [exerciseDetails, setExerciseDetails] = useState({
+    series: 3,
+    repetitions: 10,
+  });
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setSelectedExercise('');
@@ -141,7 +158,13 @@ function TrainingApp() {
         const updatedExercises = { ...prevExercises };
         updatedExercises[selectedCategory] = [
           ...prevExercises[selectedCategory],
-          selectedExercise,
+          {
+            name: selectedExercise, //zmiana
+            details: {
+              series: exerciseDetails.series,
+              repetitions: exerciseDetails.repetitions,
+            },
+          },
         ];
         return updatedExercises;
       });
@@ -157,9 +180,39 @@ function TrainingApp() {
     }
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form Data:', formData);
+    setFormData({
+      nickname: '',
+      email: '',
+      message: '',
+    });
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleExerciseDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setExerciseDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className='training-plan'>
-      <img src='/src/assets/Logo_Ród.png' alt='logo' />
+      <img
+        src='/src/assets/Logo_Ród.png'
+        alt='logo'
+        style={{ width: '150px', height: '150px' }}
+      />
       <h1 className='custom-heading'>Non_Coach</h1>
       <div className='custom-buttons'>
         <button onClick={() => handleCategoryChange('Chest')}>
@@ -187,23 +240,101 @@ function TrainingApp() {
           Abs Exercises
         </button>
       </div>
-      <label htmlFor='exerciseSelect'>Choose an exercise:</label>
-      <select
-        id='exerciseSelect'
-        value={selectedExercise}
-        onChange={(e) => setSelectedExercise(e.target.value)}
-      >
-        <option value=''>Select an exercise</option>
-        {allExercises[selectedCategory].map((exercise, index) => (
-          <option key={index} value={exercise}>
-            {exercise}
-          </option>
-        ))}
-      </select>
+
+      <div className='custom-parameter'>
+        <label className='parameter' htmlFor='exerciseSelect'>
+          Choose an exercise:
+        </label>
+        <select
+          id='exerciseSelect'
+          value={selectedExercise}
+          onChange={(e) => setSelectedExercise(e.target.value)}
+        >
+          <option value=''>Select an exercise</option>
+          {allExercises[selectedCategory].map((exercise, index) => (
+            <option key={index} value={exercise}>
+              {exercise}
+            </option>
+          ))}
+        </select>
+        <label className='parameter' htmlFor='series'>
+          Series:
+        </label>
+        <select
+          type='number'
+          id='series'
+          name='series'
+          value={exerciseDetails.series}
+          onChange={handleExerciseDetailsChange}
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+          <option value={6}>6</option>
+          <option value={7}>7</option>
+          <option value={8}>8</option>
+          <option value={9}>9</option>
+          <option value={10}>10</option>
+        </select>
+
+        <label className='parameter' htmlFor='repetitions'>
+          Repetitions:
+        </label>
+        <select
+          type='number'
+          id='repetitions'
+          name='repetitions'
+          value={exerciseDetails.repetitions}
+          onChange={handleExerciseDetailsChange}
+        >
+          {[...Array(20).keys()].map((value) => (
+            <option key={value + 1} value={value + 1}>
+              {value + 1}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <button className='add' onClick={addExercise}>
         Add Exercise
       </button>
       {selectedCategories.length > 0 && <ExerciseList exercises={exercises} />}
+
+      <form onSubmit={handleFormSubmit}>
+        <label>
+          {' '}
+          Nickname:
+          <input
+            type='text'
+            name='nickname'
+            value={formData.nickname}
+            onChange={handleFormChange}
+          />
+        </label>
+        <br />
+        <label>
+          Email:
+          <input
+            type='email'
+            name='email'
+            value={formData.email}
+            onChange={handleFormChange}
+          />
+        </label>
+        <br />
+        <label>
+          Text:
+          <textarea
+            name='text'
+            value={formData.text}
+            onChange={handleFormChange}
+          />
+        </label>
+        <br />
+        <button type='submit'>Send</button>
+      </form>
     </div>
   );
 }
