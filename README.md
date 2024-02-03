@@ -40,7 +40,7 @@ To run the application, follow these steps:
 
 ## Dependencies
 
-The application uses React for the frontend. It also includes Firebase SDK for potential integration with a backend (note: Firebase configuration is currently commented out).
+The application uses React for the frontend. It also includes supabase SDK for potential integration with a backend .
 
 ## Usage
 
@@ -53,13 +53,16 @@ The application uses React for the frontend. It also includes Firebase SDK for p
 ## Project Structure
 
 - `src/TrainingApp.js`: Main component for the training app, handling category and exercise selection.
-- `src/ExerciseList.js`: Component to display the user's training plan.
 - `src/main.scss`: Stylesheet for the application.
+- `src/main.jsx`: main component
+- `src/components/ExerciseList.js`: Component to display the user's training plan.
+- `src/components/AllContacts`: is designed to fetch and display data from the Supabase database. It utilizes the Supabase JavaScript client library for interaction with the database.
+- `src/components/ContactForm`: component is a React functional component designed to capture user input, submit it to the Supabase database, and provide feedback to the user. It integrates with the Supabase JavaScript client library for database interaction.
+- `src/components/FAQ`: component is a React functional component designed to provide a collapsible Frequently Asked Questions (FAQ) section. Users can click on the "FAQ" heading to expand or collapse the content. The component covers various exercise-related questions and answers.
 - Other files and directories: Standard React project structure.
 
 ## Additional Information
 
-- Firebase Configuration: The Firebase configuration is provided in the code, but it's currently commented out. Uncomment and configure it if you plan to use Firebase features.
 - Logo: The application uses a logo located at `/src/assets/Logo_Ród.png`.
 
 Feel free to customize and extend the application based on your needs. Happy training! 🏋️‍♂️🏋️‍♀️

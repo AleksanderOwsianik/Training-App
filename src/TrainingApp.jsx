@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ExerciseList from '@components/ExerciseList';
 import './main.scss';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://vcvnxuxqzbyoikhsszqq.supabase.co';
-const supabaseKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjdm54dXhxemJ5b2lraHNzenFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDYyNjk1NTYsImV4cCI6MjAyMTg0NTU1Nn0.Shuy3YGPYjRC4lxzre-NW2B0TbnfMjVR0zUxNoY_RWs';
-const supabase = createClient(supabaseUrl, supabaseKey);
+import ContactForm from '@components/ContactForm';
+import AllContacts from '@components/AllContacts';
+import FAQ from './components/FAQ';
 
 const allExercises = {
   Chest: [
@@ -133,12 +130,6 @@ function TrainingApp() {
   );
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const [formData, setFormData] = useState({
-    nickname: '',
-    email: '',
-    text: 'You need help, ask me.',
-  });
-
   const [exerciseDetails, setExerciseDetails] = useState({
     series: 3,
     repetitions: 10,
@@ -159,7 +150,7 @@ function TrainingApp() {
         updatedExercises[selectedCategory] = [
           ...prevExercises[selectedCategory],
           {
-            name: selectedExercise, //zmiana
+            name: selectedExercise,
             details: {
               series: exerciseDetails.series,
               repetitions: exerciseDetails.repetitions,
@@ -180,30 +171,22 @@ function TrainingApp() {
     }
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form Data:', formData);
-    setFormData({
-      nickname: '',
-      email: '',
-      message: '',
-    });
-  };
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
-
   const handleExerciseDetailsChange = (e) => {
     const { name, value } = e.target;
     setExerciseDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
+  };
+  const removeExercise = (category, index) => {
+    setExercises((prevExercises) => {
+      const updatedExercises = { ...prevExercises };
+      updatedExercises[category] = [
+        ...prevExercises[category].slice(0, index),
+        ...prevExercises[category].slice(index + 1),
+      ];
+      return updatedExercises;
+    });
   };
 
   return (
@@ -267,16 +250,11 @@ function TrainingApp() {
           value={exerciseDetails.series}
           onChange={handleExerciseDetailsChange}
         >
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-          <option value={6}>6</option>
-          <option value={7}>7</option>
-          <option value={8}>8</option>
-          <option value={9}>9</option>
-          <option value={10}>10</option>
+          {[...Array(10).keys()].map((value) => (
+            <option key={value + 1} value={value + 1}>
+              {value + 1}
+            </option>
+          ))}
         </select>
 
         <label className='parameter' htmlFor='repetitions'>
@@ -300,41 +278,12 @@ function TrainingApp() {
       <button className='add' onClick={addExercise}>
         Add Exercise
       </button>
-      {selectedCategories.length > 0 && <ExerciseList exercises={exercises} />}
-
-      <form onSubmit={handleFormSubmit}>
-        <label>
-          {' '}
-          Nickname:
-          <input
-            type='text'
-            name='nickname'
-            value={formData.nickname}
-            onChange={handleFormChange}
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type='email'
-            name='email'
-            value={formData.email}
-            onChange={handleFormChange}
-          />
-        </label>
-        <br />
-        <label>
-          Text:
-          <textarea
-            name='text'
-            value={formData.text}
-            onChange={handleFormChange}
-          />
-        </label>
-        <br />
-        <button type='submit'>Send</button>
-      </form>
+      {selectedCategories.length > 0 && (
+        <ExerciseList exercises={exercises} onRemoveExercise={removeExercise} />
+      )}
+      <ContactForm />
+      <AllContacts />
+      <FAQ />
     </div>
   );
 }

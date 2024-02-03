@@ -1,29 +1,28 @@
 :root {
   box-sizing: border-box;
+  --primary-color: #2b64a0c5;
+  --second-color: black;
+  --third-color: #56ab2f;
+}
+
+body {
+  background-image: url('./assets/image2.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
 div {
   font-family: sans-serif;
 }
 
-button {
-  margin: 1px;
-  flex-wrap: wrap;
-  background: #56ab2f;
-  background: linear-gradient(to right, #a8e063, #56ab2f);
-  color: black;
-  border: 2px solid #6ca24a;
-  border-radius: 35px;
-}
-
 .custom-heading {
-  color: #2b64a0c5;
+  color: var(--primary-color);
   font-size: 2em;
   margin: 0;
 }
 
 label {
-  color: #2b64a0c5;
+  color: var(--primary-color);
   font-size: 13px;
 }
 
@@ -36,7 +35,7 @@ label {
 }
 
 .training-plan {
-  background-color: white;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,7 +44,7 @@ label {
 .exercise-category {
   font-size: 15px;
   inline-size: auto;
-  color: black;
+  color: var(--second-color);
 }
 
 .custom-parameter {
@@ -54,8 +53,126 @@ label {
   flex-wrap: wrap;
   gap: 10px;
 }
-.input {
-  border: none;
-  border-radius: px;
-  background-color: #655e5e;
+
+.form {
+  min-width: 1rem;
+
+  .title {
+    color: var(--primary-color);
+    font-size: 10.5px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .form-control {
+    background-color: #f2f6f8;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0px 7px 5px rgba(0, 0, 0, 0.11);
+    text-align: center;
+    font-size: 10px;
+
+    &.thick {
+      height: 3px;
+      padding: 0.5rem 3.5rem;
+    }
+
+    &:focus {
+      background-color: var(--primary-color);
+      border: none;
+      box-shadow: 0px 7px 5px rgba(0, 0, 0, 0.11);
+    }
+  }
+
+  .message .form-control {
+    padding: 0.5rem 0.8rem;
+    font-size: 10px;
+  }
+
+  ::placeholder {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 6000;
+    font-size: 1.1rem;
+    color: #838788;
+    position: relative;
+    left: 0;
+  }
+
+  input,
+  textarea {
+    font-family: 'Quicksand', sans-serif;
+    color: var(--second-color);
+    font-size: 1.1rem;
+  }
+}
+button.remove-button {
+  background-image: linear-gradient(
+    to right,
+    #8e0e00 0%,
+    #1f1c18 51%,
+    #8e0e00 100%
+  );
+
+  transition: 0.5s;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  margin-left: 5px;
+
+  &:hover:enabled {
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-0.15em);
+  }
+}
+
+button:not(.remove-button) {
+  margin: 1px;
+  flex-wrap: wrap;
+  background: linear-gradient(131deg, #a8e063, #56ab2f);
+  color: var(--second-color);
+  border: 2px solid #6ca24a;
+  border-radius: 35px;
+  box-shadow: 0 0.5em 0.5em -0.4em #2baa18f6;
+
+  &:hover:enabled {
+    box-shadow: 0 0.5em 0.5em -0.4em #2baa18f6;
+    background-size: 200% 100%;
+    transform: translateY(-0.15em);
+  }
+}
+
+.btn.btn-primary {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  height: 1.5rem;
+  border: 0;
+  border-radius: 3rem;
+  background-image: linear-gradient(131deg, #60ff40, #5d9871, #96bd33, #28ad60);
+  background-size: 300% 100%;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn.btn-primary:hover:enabled {
+  box-shadow: 0 0.5em 0.5em -0.4em #2baa18f6;
+  background-size: 100% 100%;
+  transform: translateY(-0.15em);
+}
+.faq-container {
+  border-radius: 30px;
+  background: linear-gradient(
+    131deg,
+    rgba(112, 188, 97, 0.8),
+    rgba(93, 152, 113, 0.8),
+    rgba(150, 189, 51, 0.8),
+    rgba(40, 173, 96, 0.8)
+  );
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 80%;
+  margin: auto;
+  z-index: 1;
+  max-height: 70vh;
+  overflow-y: auto;
+  font-size: 10px;
 }
