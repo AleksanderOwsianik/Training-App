@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import ExerciseList from '@components/ExerciseList';
 import './main.scss';
+import ContactForm from '@components/ContactForm';
+import AllContacts from '@components/AllContacts';
+import FAQ from './components/FAQ';
 
 const allExercises = {
   Chest: [
@@ -127,6 +130,11 @@ function TrainingApp() {
   );
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  const [exerciseDetails, setExerciseDetails] = useState({
+    series: 3,
+    repetitions: 10,
+  });
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setSelectedExercise('');
@@ -141,7 +149,13 @@ function TrainingApp() {
         const updatedExercises = { ...prevExercises };
         updatedExercises[selectedCategory] = [
           ...prevExercises[selectedCategory],
-          selectedExercise,
+          {
+            name: selectedExercise,
+            details: {
+              series: exerciseDetails.series,
+              repetitions: exerciseDetails.repetitions,
+            },
+          },
         ];
         return updatedExercises;
       });
@@ -157,9 +171,31 @@ function TrainingApp() {
     }
   };
 
+  const handleExerciseDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setExerciseDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+  const removeExercise = (category, index) => {
+    setExercises((prevExercises) => {
+      const updatedExercises = { ...prevExercises };
+      updatedExercises[category] = [
+        ...prevExercises[category].slice(0, index),
+        ...prevExercises[category].slice(index + 1),
+      ];
+      return updatedExercises;
+    });
+  };
+
   return (
     <div className='training-plan'>
-      <img src='/src/assets/Logo_Ród.png' alt='logo' />
+      <img
+        src='/src/assets/Logo_Ród.png'
+        alt='logo'
+        style={{ width: '150px', height: '150px' }}
+      />
       <h1 className='custom-heading'>Non_Coach</h1>
       <div className='custom-buttons'>
         <button onClick={() => handleCategoryChange('Chest')}>
@@ -187,23 +223,67 @@ function TrainingApp() {
           Abs Exercises
         </button>
       </div>
-      <label htmlFor='exerciseSelect'>Choose an exercise:</label>
-      <select
-        id='exerciseSelect'
-        value={selectedExercise}
-        onChange={(e) => setSelectedExercise(e.target.value)}
-      >
-        <option value=''>Select an exercise</option>
-        {allExercises[selectedCategory].map((exercise, index) => (
-          <option key={index} value={exercise}>
-            {exercise}
-          </option>
-        ))}
-      </select>
+
+      <div className='custom-parameter'>
+        <label className='parameter' htmlFor='exerciseSelect'>
+          Choose an exercise:
+        </label>
+        <select
+          id='exerciseSelect'
+          value={selectedExercise}
+          onChange={(e) => setSelectedExercise(e.target.value)}
+        >
+          <option value=''>Select an exercise</option>
+          {allExercises[selectedCategory].map((exercise, index) => (
+            <option key={index} value={exercise}>
+              {exercise}
+            </option>
+          ))}
+        </select>
+        <label className='parameter' htmlFor='series'>
+          Series:
+        </label>
+        <select
+          type='number'
+          id='series'
+          name='series'
+          value={exerciseDetails.series}
+          onChange={handleExerciseDetailsChange}
+        >
+          {[...Array(10).keys()].map((value) => (
+            <option key={value + 1} value={value + 1}>
+              {value + 1}
+            </option>
+          ))}
+        </select>
+
+        <label className='parameter' htmlFor='repetitions'>
+          Repetitions:
+        </label>
+        <select
+          type='number'
+          id='repetitions'
+          name='repetitions'
+          value={exerciseDetails.repetitions}
+          onChange={handleExerciseDetailsChange}
+        >
+          {[...Array(20).keys()].map((value) => (
+            <option key={value + 1} value={value + 1}>
+              {value + 1}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <button className='add' onClick={addExercise}>
         Add Exercise
       </button>
-      {selectedCategories.length > 0 && <ExerciseList exercises={exercises} />}
+      {selectedCategories.length > 0 && (
+        <ExerciseList exercises={exercises} onRemoveExercise={removeExercise} />
+      )}
+      <ContactForm />
+      <AllContacts />
+      <FAQ />
     </div>
   );
 }
